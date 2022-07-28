@@ -1,15 +1,15 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppDatabase } from './common/app.database';
+import { AppDatabase } from './common/modules/app.database';
 import { MulterModule } from '@nestjs/platform-express';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { AuthController } from './auth/auth.controller';
-import { APP_FILTER, APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { RolesGuard } from './auth/guards/roles.guard';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AuthStrategyGuard } from './auth/guards/auth-strategy.guard';
 
 @Module({
   imports: [
@@ -30,11 +30,11 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuard,
+      useClass: AuthStrategyGuard,
     },
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: RolesGuard,
     },
   ],
 })

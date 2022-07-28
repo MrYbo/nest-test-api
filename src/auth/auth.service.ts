@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -10,12 +10,15 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  /**
-   * 用户注册
-   * @param createAuthDto
-   */
   async register(registerAuthDto: RegisterAuthDto) {
-    return await this.userService.create(registerAuthDto);
+    let user = await this.userService.findOne({
+      where: { username: registerAuthDto.username },
+    });
+    if (user) {
+      throw new ConflictException('用户已存在');
+    }
+    user = await this.userService.create(registerAuthDto);
+    return user;
   }
 
   async findOne(username: string) {

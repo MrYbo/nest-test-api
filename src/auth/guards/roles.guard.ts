@@ -1,8 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../../common/constants/role.enum';
+import { Role } from '../../common/constants/constants';
 import { ROLES_KEY } from '../../common/decorator/roles.decorator';
-import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -19,12 +18,8 @@ export class RolesGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    // const { authorization } = request.headers;
-    // const token = authorization.split(' ')[1];
-    // if (!token) {
-    //   return false;
-    // }
     const user = request.user;
+
     if (!user) {
       return false;
     }

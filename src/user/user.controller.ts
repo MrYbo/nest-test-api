@@ -1,20 +1,16 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   NotFoundException,
-  UseGuards,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Roles } from '../common/decorator/roles.decorator';
-import { Role } from '../common/constants/role.enum';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -26,8 +22,6 @@ export class UserController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.Admin)
   findAll() {
     return this.userService.findAll();
   }
