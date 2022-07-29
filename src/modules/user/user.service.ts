@@ -4,7 +4,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { FindOneOptions, Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -33,11 +32,10 @@ export class UserService {
   }
 
   async userLogin(username: string) {
-    const user = this.userRepository
+    return this.userRepository
       .createQueryBuilder('user')
       .addSelect('user.password')
       .where({ username })
       .getOne();
-    return user;
   }
 }

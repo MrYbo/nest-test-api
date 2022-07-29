@@ -1,11 +1,10 @@
 import {
+  BeforeInsert,
   Column,
+  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  BeforeInsert,
-  CreateDateColumn,
   UpdateDateColumn,
-  Timestamp,
 } from 'typeorm';
 
 import { hash } from 'bcrypt';
