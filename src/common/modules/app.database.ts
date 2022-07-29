@@ -1,15 +1,16 @@
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 
-export class AppDatabase {
-  private static factory(): TypeOrmModuleOptions {
+export class AppDatabaseModule {
+  private static factory(configService: ConfigService): TypeOrmModuleOptions {
     return {
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '12345678',
-      database: 'test',
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      host: configService.get('database.host'),
+      port: configService.get('database.port'),
+      username: configService.get('database.username'),
+      password: configService.get('database.password'),
+      database: configService.get('database.database'),
+      entities: [__dirname + '/../../modules/**/*.entity{.ts,.js}'],
       synchronize: true,
       // logging: true,
     };
@@ -17,7 +18,8 @@ export class AppDatabase {
 
   static forRootAsync() {
     return TypeOrmModule.forRootAsync({
-      useFactory: AppDatabase.factory,
+      useFactory: AppDatabaseModule.factory,
+      inject: [ConfigService],
     });
   }
 }

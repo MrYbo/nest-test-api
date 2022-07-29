@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard, IAuthGuard } from '@nestjs/passport';
-import { SELECT_AUTH_KEY } from '../../common/decorator/auth-strategy.decorator';
-import { AuthStrategies } from '../../common/constants/constants';
+import { SELECT_AUTH_KEY } from '../../../common/decorator/auth-strategy.decorator';
+import { AuthStrategies } from '../../../common/constants/constants';
 
 @Injectable()
 export class AuthStrategyGuard implements CanActivate {

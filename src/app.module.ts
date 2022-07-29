@@ -1,23 +1,23 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppDatabase } from './common/modules/app.database';
+import { AppDatabaseModule } from './common/modules/app.database';
 import { MulterModule } from '@nestjs/platform-express';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { AuthController } from './auth/auth.controller';
+import { AuthController } from './modules/auth/auth.controller';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { RolesGuard } from './auth/guards/roles.guard';
-import { AuthStrategyGuard } from './auth/guards/auth-strategy.guard';
+import { RolesGuard } from './modules/auth/guards/roles.guard';
+import { AuthStrategyGuard } from './modules/auth/guards/auth-strategy.guard';
+import { AppConfigModule } from './common/modules/app.config';
 
 @Module({
   imports: [
-    AppDatabase.forRootAsync(),
+    AppConfigModule.footRoot(),
+    AppDatabaseModule.forRootAsync(),
     // 文件上传
-    MulterModule.register({
-      dest: 'uploads',
-    }),
+    MulterModule.register({ dest: 'uploads' }),
 
     AuthModule,
     UserModule,

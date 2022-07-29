@@ -3,9 +3,9 @@ import { AuthService } from './auth.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginAuthDto } from './dto/login-auth.dto';
-import { CurrentUser } from '../common/decorator/current-user.decorator';
-import { AuthStrategy } from '../common/decorator/auth-strategy.decorator';
-import { AuthStrategies } from '../common/constants/constants';
+import { CurrentUser } from '../../common/decorator/current-user.decorator';
+import { AuthStrategy } from '../../common/decorator/auth-strategy.decorator';
+import { AuthStrategies } from '../../common/constants/constants';
 
 @Controller()
 @ApiTags('auth')
