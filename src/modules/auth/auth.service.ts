@@ -2,12 +2,20 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './jwt.payload.interface';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import Redis from 'ioredis';
+import { ConfigService } from '@nestjs/config';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ms = require('ms');
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    @InjectRedis() private readonly redis: Redis,
   ) {}
 
   async register(registerAuthDto: RegisterAuthDto) {
@@ -29,12 +37,16 @@ export class AuthService {
     return await this.userService.findOne({ where: { id } });
   }
 
-  async getToken(user: any) {
-    const payload = { sub: user.id };
-    return this.jwtService.sign(payload);
-  }
-
-  async verifyToken(token: string) {
-    return this.jwtService.verify(token);
+  async getToken(user: any): Promise<string> {
+    const payload: JwtPayload = { sub: user.id };
+    const token = this.jwtService.sign(payload);
+    const oauthKey = ['oauth', token].join(':');
+    const expiresIn = this.configService.get('jwt.expiresIn');
+    await this.redis.setex(
+      oauthKey,
+      ms(expiresIn) / 1000,
+      JSON.stringify(user),
+    );
+    return token;
   }
 }

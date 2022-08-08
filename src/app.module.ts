@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppDatabaseModule } from './common/modules/app.database';
 import { MulterModule } from '@nestjs/platform-express';
 import { AuthModule } from './modules/auth/auth.module';
@@ -11,18 +10,21 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { RolesGuard } from './modules/auth/guards/roles.guard';
 import { AuthStrategyGuard } from './modules/auth/guards/auth-strategy.guard';
 import { AppConfigModule } from './common/modules/app.config';
+import { TaskRunner } from './tasks/task.runner';
+import { AppRedisModule } from './common/modules/app.redis';
 
 @Module({
   imports: [
     AppConfigModule.footRoot(),
     AppDatabaseModule.forRootAsync(),
+    AppRedisModule.forRootAsync(),
     // 文件上传
     MulterModule.register({ dest: 'uploads' }),
 
     AuthModule,
     UserModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
     {
       provide: APP_FILTER,
@@ -36,6 +38,7 @@ import { AppConfigModule } from './common/modules/app.config';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    TaskRunner,
   ],
 })
 export class AppModule {

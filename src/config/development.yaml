@@ -10,3 +10,17 @@ database:
 jwt:
     secret: 'secret'
     expiresIn: '24h'
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  keyPrefix: 'test-aa:'
+
+# 集群配置方法
+# redis:
+#   - host: 127.0.0.1
+#     port: 6379
+#     keyPrefix: 'test-aa:'
+#   - host: 127.0.0.1
+#     port: 6378
+#     keyPrefix: 'test-aa:'
