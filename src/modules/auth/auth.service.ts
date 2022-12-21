@@ -34,6 +34,9 @@ export class AuthService {
   }
 
   async findById(id) {
+    if (!id) {
+      return null;
+    }
     return await this.userService.findOne({ where: { id } });
   }
 
